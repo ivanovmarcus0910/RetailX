@@ -1,13 +1,33 @@
 ﻿@inherits LayoutComponentBase
-
+@inject Auth.IAuthService Auth
+@inject NavigationManager Nav
+@using Microsoft.AspNetCore.Components.Authorization
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <AuthorizeView>
+                 <Authorized>
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">Xin chào, @context.User.Identity!.Name</span>
+                        <button class="btn btn-outline-danger btn-sm" @onclick="DoLogout">Đăng xuất</button>
+                    </div>
+               </Authorized>
+                <NotAuthorized>
+                    <a href="/auth">Đăng nhập</a>
+
+                </NotAuthorized>
+            </AuthorizeView>
+
+          
         </div>
 
         <article class="content px-4">
@@ -21,3 +41,10 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+@code {
+    async Task DoLogout()
+    {
+        await Auth.SignOutAsync();
+        Nav.NavigateTo("/login", forceLoad: true);
+    }
+}

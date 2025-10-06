@@ -1,0 +1,101 @@
+﻿@page "/auth"
+@using RetailX.Auth
+@inject IAuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Đăng nhập / Đăng ký</PageTitle>
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h3 class="text-center mb-3">
+        @(isLogin ? "Đăng nhập hệ thống" : "Đăng ký tài khoản mới")
+    </h3>
+
+    <EditForm Model="formModel" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label">Tên đăng nhập</label>
+            <InputText class="form-control" @bind-Value="formModel.UserName" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mật khẩu</label>
+            <InputText class="form-control" @bind-Value="formModel.Password" type="password" />
+        </div>
+
+        @if (!isLogin)
+        {
+            <div class="mb-3">
+                <label class="form-label">Xác nhận mật khẩu</label>
+                <InputText class="form-control" @bind-Value="formModel.ConfirmPassword" type="password" />
+            </div>
+        }
+
+        <button class="btn btn-primary w-100" type="submit">
+            @(isLogin ? "Đăng nhập" : "Đăng ký")
+        </button>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(_message))
+    {
+        <div class="alert @(isLogin ? "alert-danger" : "alert-success") mt-3">@_message</div>
+    }
+
+    <div class="text-center mt-3">
+        <a href="" @onclick:preventDefault="true" @onclick="SwitchMode">
+            @(isLogin ? "Chưa có tài khoản? Đăng ký ngay" : "Đã có tài khoản? Đăng nhập")
+        </a>
+    </div>
+</div>
+
+@code {
+    private bool isLogin = true;
+    private AuthModel formModel = new();
+    private string? _message;
+
+    private async Task HandleSubmit()
+    {
+        if (isLogin)
+        {
+            var result = await Auth.SignInAsync(formModel.UserName, formModel.Password);
+            if (result)
+            {
+                Nav.NavigateTo("/", forceLoad: true);
+            }
+            else _message = "Sai tên đăng nhập hoặc mật khẩu!";
+        }
+        else
+        {
+            if (formModel.Password != formModel.ConfirmPassword)
+            {
+                _message = "Mật khẩu xác nhận không khớp!";
+                return;
+            }
+
+            try
+            {
+                await Auth.RegisterAsync(formModel.UserName, formModel.Password);
+                _message = "Đăng ký thành công! Mời bạn đăng nhập.";
+                isLogin = true;
+            }
+            catch (Exception ex)
+            {
+                _message = "Lỗi đăng ký: " + ex.Message;
+            }
+        }
+    }
+
+    private void SwitchMode()
+    {
+        isLogin = !isLogin;
+        _message = null;
+    }
+
+    public class AuthModel
+    {
+        public string UserName { get; set; } = "";
+        public string Password { get; set; } = "";
+        public string? ConfirmPassword { get; set; }
+    }
+}

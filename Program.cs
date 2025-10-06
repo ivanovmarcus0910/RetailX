@@ -1,4 +1,8 @@
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
+using RetailX.Auth;
 using RetailX.Components;
+using RetailX.Data;
 
 namespace RetailX
 {
@@ -9,9 +13,16 @@ namespace RetailX
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+            builder.Services.AddScoped<AuthenticationStateProvider, SimpleAuthStateProvider>();
+            builder.Services.AddScoped<IAuthService, SimpleAuthStateProvider>();
+            builder.Services.AddAuthorizationCore();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,8 +40,21 @@ namespace RetailX
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                try
+                {
+                    db.Database.CanConnect();
+                    Console.WriteLine("✅ DB connected successfully!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ DB connect error: {ex.Message}");
+                }
+            }
             app.Run();
+           
         }
     }
 }
