@@ -1,0 +1,30 @@
+﻿.auth-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #2b64b4, #3b0a73); /* xanh tím nền toàn trang */
+}
+
+/* 🔹 Thanh nav xanh tím */
+.auth-navbar {
+    height: 3.5rem;
+    background: linear-gradient(90deg, #2b64b4, #3b0a73);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+/* 🔹 Nội dung body */
+.auth-body {
+    flex: 1;
+    background: radial-gradient(circle at top, rgba(43, 100, 180, 0.3), rgba(59, 10, 115, 0.7));
+}
+
+/* 🔹 Card đăng nhập */
+.auth-card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 10px;
+    width: 400px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}

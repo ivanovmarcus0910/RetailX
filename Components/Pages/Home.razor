@@ -1,13 +1,52 @@
 ﻿@page "/"
 @page "/home"
-
 @using Microsoft.AspNetCore.Components.Authorization
-
-@inject Auth.IAuthService Auth
 @inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
 
-<PageTitle>Home</PageTitle>
+<PageTitle>RetailX - Quản lý bán hàng thông minh</PageTitle>
 
-<h1>Hello, world!</h1>
+<AuthorizeView Context="context">
+    <Authorized>
+            <div class="dashboard-home">
+                <div class="welcome">
+                    <h2>Xin chào, @context.User.Identity?.Name 👋</h2>
+                    <p>Chào mừng quay lại hệ thống <b>RetailX</b> — quản lý bán hàng chuyên nghiệp.</p>
 
-Welcome to RetailX.
+                    <div class="summary">
+                        <div class="card">
+                            <h5>🛍️ Sản phẩm</h5>
+                            <p>128 mặt hàng</p>
+                        </div>
+                        <div class="card">
+                            <h5>💰 Doanh thu tháng</h5>
+                            <p>32.500.000đ</p>
+                        </div>
+                        <div class="card">
+                            <h5>📦 Đơn hàng hôm nay</h5>
+                            <p>12 đơn</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </Authorized>
+
+    <NotAuthorized>
+            <div class="landing">
+                <div class="hero">
+                    <h1>RetailX</h1>
+                    <h3>Nền tảng quản lý bán hàng đa chi nhánh</h3>
+                    <p>
+                        Kết nối mọi quy trình kinh doanh của bạn — từ kho, bán hàng đến khách hàng.  
+                        Quản lý dễ dàng, nhanh chóng và bảo mật tuyệt đối.
+                    </p>
+                    <button class="btn btn-primary btn-lg mt-3" @onclick="GoToAuth">
+                        Bắt đầu ngay
+                    </button>
+                </div>
+            </div>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    void GoToAuth() => Nav.NavigateTo("/auth");
+}

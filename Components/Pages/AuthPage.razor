@@ -1,7 +1,10 @@
 ﻿@page "/auth"
 @using RetailX.Auth
+@using Microsoft.AspNetCore.Components.Authorization
+
 @inject IAuthService Auth
 @inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Đăng nhập / Đăng ký</PageTitle>
 
@@ -53,6 +56,18 @@
     private bool isLogin = true;
     private AuthModel formModel = new();
     private string? _message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            // ⚡ Nếu đã đăng nhập → redirect về trang chủ
+            Nav.NavigateTo("/", forceLoad: true);
+        }
+    }
 
     private async Task HandleSubmit()
     {

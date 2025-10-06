@@ -3,18 +3,55 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
-                <NotAuthorized>
-                    <p>Bạn chưa đăng nhập. <a href="/login">Đăng nhập ngay</a></p>
-                </NotAuthorized>
-            </AuthorizeRouteView>
+
+            @* 🟣 1. Trang AUTH (Login, Register) *@
+            @if (routeData.PageType.FullName!.Contains("Auth"))
+            {
+                <LayoutView Layout="@typeof(Layout.AuthLayout)">
+                    <RouteView RouteData="@routeData" />
+                </LayoutView>
+            }
+
+            @* 🟢 2. Trang HOME — layout phụ thuộc vào login *@
+            else if (routeData.PageType.FullName!.Contains("Home"))
+            {
+                <AuthorizeView>
+                    <Authorized>
+                        <LayoutView Layout="@typeof(Layout.MainLayout)">
+                            <RouteView RouteData="@routeData" />
+                        </LayoutView>
+                    </Authorized>
+                    <NotAuthorized>
+                        <LayoutView Layout="@typeof(Layout.AuthLayout)">
+                            <RouteView RouteData="@routeData" />
+                        </LayoutView>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+            }
+
+            @* 🔵 3. Các trang khác — chỉ cho phép nếu login *@
+            else
+            {
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
+                    <NotAuthorized>
+                        <LayoutView Layout="@typeof(Layout.AuthLayout)">
+                            <div class="text-center mt-5">
+                                <p>Bạn chưa đăng nhập.</p>
+                                <a href="/auth" class="btn btn-primary mt-2">Đăng nhập ngay</a>
+                            </div>
+                        </LayoutView>
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            }
 
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
 
         <NotFound>
-            <p>Không tìm thấy trang.</p>
+            <LayoutView Layout="@typeof(Layout.AuthLayout)">
+                <p class="text-center mt-5">Không tìm thấy trang yêu cầu 😢</p>
+            </LayoutView>
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
-

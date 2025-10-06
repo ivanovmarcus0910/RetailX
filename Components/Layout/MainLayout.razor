@@ -45,6 +45,6 @@
     async Task DoLogout()
     {
         await Auth.SignOutAsync();
-        Nav.NavigateTo("/login", forceLoad: true);
+        Nav.NavigateTo("/home", forceLoad: true);
     }
 }

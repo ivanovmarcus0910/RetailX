@@ -1,0 +1,133 @@
+﻿/* === Dành cho trạng thái đã đăng nhập (Dashboard) === */
+.dashboard-home {
+    width: 100%;
+    min-height: 100vh; /* full viewport */
+    background: linear-gradient(135deg, #3b0a73, #2b64b4);
+    color: white;
+    padding: 3rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-sizing: border-box;
+    overflow-y: auto; /* cho phép scroll nếu có nhiều nội dung */
+}
+.top-row {
+    background: linear-gradient(135deg, #3b0a73, #2b64b4);
+    color: white;
+}
+.welcome {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+    .welcome h2 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .welcome p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.1rem;
+    }
+
+.summary {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    text-align: center;
+    width: 220px;
+    transition: 0.25s ease;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .card h5 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .card p {
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+/* === Dành cho trạng thái chưa đăng nhập (Landing / Quảng cáo) === */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.landing {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #3b0a73, #2b64b4);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem;
+    overflow: hidden;
+}
+
+.hero {
+    max-width: 700px;
+    margin: auto;
+}
+
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+    }
+
+    .hero h3 {
+        font-weight: 400;
+        color: #d0d0ff;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+        color: #e0e0ff;
+        line-height: 1.6;
+        font-size: 1.05rem;
+    }
+
+    .hero button {
+        background-color: #ffffff;
+        color: #3b0a73;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.25s ease;
+    }
+
+        .hero button:hover {
+            background-color: #e2e2ff;
+            transform: scale(1.05);
+        }
